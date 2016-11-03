@@ -1,23 +1,27 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.GL20;
 
 public class GameScreen extends ScreenAdapter {
-	private SlaveCardGame slaveCardGame;
-	private Texture testImg;
-	
+	private World world;
+	private WorldRenderer worldRenderer;
+	private BackgroundRenderer backgroundRenderer;
 	public GameScreen (SlaveCardGame slaveCardGame) {
-		this.slaveCardGame = slaveCardGame;
-		testImg = new Texture("8156.png");
+		this.world = new World();
+		this.worldRenderer = new WorldRenderer(slaveCardGame,world);
+		this.backgroundRenderer = new BackgroundRenderer(slaveCardGame,world);
 	}
 	
 	@Override
 	public void render (float delta) {
-		SpriteBatch batch = slaveCardGame.batch;
-		batch.begin();
-		batch.draw(testImg, 100, 100);
-		batch.end();
+		world.update(delta);
+		 
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+ 
+        backgroundRenderer.render(delta);
+        worldRenderer.render(delta);
 	}
 }
