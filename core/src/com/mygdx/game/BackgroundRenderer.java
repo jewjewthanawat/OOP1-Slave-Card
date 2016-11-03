@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class BackgroundRenderer {
-	private World world;
 	private SlaveCardGame slaveCardGame;
 	private TextureRegion field;
 	private TextureRegion cardBar;
@@ -23,9 +22,8 @@ public class BackgroundRenderer {
 	private TextureRegion submitButton;
 	private TextureRegion passButton;
 	
-	public BackgroundRenderer(SlaveCardGame slaveCardGame , World world) {
+	public BackgroundRenderer(SlaveCardGame slaveCardGame) {
 		this.slaveCardGame = slaveCardGame;
-		this.world = world;
 		field = new TextureRegion(new Texture("yellow.png"));
 		cardBar = new TextureRegion(new Texture("green.png"));
 		choosedCardBar = new TextureRegion(new Texture("blue.png"));

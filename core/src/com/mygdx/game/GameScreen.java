@@ -8,10 +8,12 @@ public class GameScreen extends ScreenAdapter {
 	private World world;
 	private WorldRenderer worldRenderer;
 	private BackgroundRenderer backgroundRenderer;
+	private CardRenderer cardRenderer;
 	public GameScreen (SlaveCardGame slaveCardGame) {
 		this.world = new World();
 		this.worldRenderer = new WorldRenderer(slaveCardGame,world);
-		this.backgroundRenderer = new BackgroundRenderer(slaveCardGame,world);
+		this.backgroundRenderer = new BackgroundRenderer(slaveCardGame);
+		this.cardRenderer = new CardRenderer(slaveCardGame,world);
 	}
 	
 	@Override
@@ -23,5 +25,6 @@ public class GameScreen extends ScreenAdapter {
  
         backgroundRenderer.render(delta);
         worldRenderer.render(delta);
+        cardRenderer.render(delta);
 	}
 }
