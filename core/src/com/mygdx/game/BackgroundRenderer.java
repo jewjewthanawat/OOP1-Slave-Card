@@ -26,12 +26,12 @@ public class BackgroundRenderer {
 		this.slaveCardGame = slaveCardGame;
 		field = new TextureRegion(new Texture("yellow.png"));
 		cardBar = new TextureRegion(new Texture("green.png"));
-		choosedCardBar = new TextureRegion(new Texture("blue.png"));
-		botCardBar1 = new TextureRegion(new Texture("green.png"));
+		choosedCardBar = new TextureRegion(new Texture("green.png"));
+		botCardBar1 = new TextureRegion(new Texture("blue.png"));
 		botChoosedCardBar1 = new TextureRegion(new Texture("blue.png"));
-		botCardBar2 = new TextureRegion(new Texture("green.png"));
+		botCardBar2 = new TextureRegion(new Texture("blue.png"));
 		botChoosedCardBar2 = new TextureRegion(new Texture("blue.png"));
-		botCardBar3 = new TextureRegion(new Texture("green.png"));
+		botCardBar3 = new TextureRegion(new Texture("blue.png"));
 		botChoosedCardBar3 = new TextureRegion(new Texture("blue.png"));
 		clockWise = new TextureRegion(new Texture("red.png"));
 		round = new TextureRegion(new Texture("red.png"));
