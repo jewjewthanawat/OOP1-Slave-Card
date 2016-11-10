@@ -4,13 +4,29 @@ public class Card {
 	private int value;
 	private boolean open;
 	
-	public Card(int value, boolean open) {
+	public Card() {
+		this.value = 0;
+		this.open = false;
+	}
+	
+	public boolean isEmpty() {
+		return this.value == 0;
+	}
+	
+	public void setValue(int value) {
 		this.value = value;
-		this.open = open;
 	}
 	
 	public int getValue() {
 		return value;
+	}
+	
+	public void open() {
+		this.open = true;
+	}
+	
+	public void close() {
+		this.open = false;
 	}
 
 	public boolean isOpen() {
