@@ -24,6 +24,7 @@ public class World {
 		firstValue(storageCard);
 		shuffleCard(storageCard);
 		currentPlayer = dealCard(storageCard);
+		sortAllCard();
 		turn = 1;
 	}
 	
@@ -119,5 +120,12 @@ public class World {
 		}
 		card.clear();
 		return threeClub;
+	}
+	
+	void sortAllCard() {
+		player.sortCard();
+		bot1.sortCard();
+		bot2.sortCard();
+		bot3.sortCard();
 	}
 }

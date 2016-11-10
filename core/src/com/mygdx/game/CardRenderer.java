@@ -84,17 +84,17 @@ public class CardRenderer {
 		ArrayList<Card> bot3ChoosedCard = world.getBot(3).getChoosedCard();
 		SpriteBatch batch = slaveCardGame.batch;
 		batch.begin();
-		for (int i = 0; i < bot1Card.size(); i++) {
-			batch.draw(textureRegion[bot1Card.get(i).getValue() + 1], 50, 290-10*bot1Card.size()+20*i, 20, 20, 40, 50, 1, 1, -90);
+		for (int i = bot1Card.size() - 1; i >= 0; i--) {
+			batch.draw(textureRegion[bot1Card.get(i).getValue() + 1], 50, 270+10*bot1Card.size()-20*i, 20, 20, 40, 50, 1, 1, -90);
 		}
-		for (int i = 0; i< bot1ChoosedCard.size(); i++) {
-			batch.draw(textureRegion[bot1ChoosedCard.get(i).getValue() + 1], 125, 290-10*bot1ChoosedCard.size()+20*i, 20, 20, 40, 50, 1, 1, -90);
+		for (int i = bot1ChoosedCard.size() - 1; i >= 0; i--) {
+			batch.draw(textureRegion[bot1ChoosedCard.get(i).getValue() + 1], 125, 270+10*bot1ChoosedCard.size()-20*i, 20, 20, 40, 50, 1, 1, -90);
 		}
-		for (int i = 0; i < bot2Card.size(); i++) {
-			batch.draw(textureRegion[bot2Card.get(i).getValue() + 1], 390-10*bot2Card.size()+20*i, 500, 20, 25, 40, 50, 1, 1, 180);
+		for (int i = bot2Card.size() - 1; i >= 0; i--) {
+			batch.draw(textureRegion[bot2Card.get(i).getValue() + 1], 370+10*bot2Card.size()-20*i, 500, 20, 25, 40, 50, 1, 1, 180);
 		}
-		for (int i = 0; i< bot2ChoosedCard.size(); i++) {
-			batch.draw(textureRegion[bot2ChoosedCard.get(i).getValue() + 1], 390-10*bot2ChoosedCard.size()+20*i, 425, 20, 25, 40, 50, 1, 1, 180);
+		for (int i = bot2ChoosedCard.size() - 1; i >= 0; i--) {
+			batch.draw(textureRegion[bot2ChoosedCard.get(i).getValue() + 1], 370+10*bot2ChoosedCard.size()-20*i, 425, 20, 25, 40, 50, 1, 1, 180);
 		}
 		for (int i = bot3Card.size() - 1; i >= 0; i--) {
 			batch.draw(textureRegion[bot3Card.get(i).getValue() + 1], 700, 300-10*bot3Card.size()+20*i, 30, 20, 40, 50, 1, 1, 90);

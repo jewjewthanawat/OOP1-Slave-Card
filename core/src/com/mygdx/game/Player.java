@@ -29,6 +29,35 @@ public class Player {
 		card.add(insertCard);
 	}
 	
+	void sortCard() {
+		Card cardAtI = new Card();
+		Card cardAtJ = new Card();
+		for (int i = 0; i < card.size(); i++) {
+			for (int j = i+1; j < card.size(); j++) {
+				if (card.get(i).getValue() > card.get(j).getValue()) {
+					cardAtI = card.get(i);
+					cardAtJ = card.get(j);
+					card.remove(j);
+					card.remove(i);
+					card.add(i,cardAtJ);
+					card.add(j,cardAtI);
+				}
+			}
+		}
+		for (int i = 0; i < choosedCard.size(); i++) {
+			for (int j = i+1; j < choosedCard.size(); j++) {
+				if (choosedCard.get(i).getValue() > choosedCard.get(j).getValue()) {
+					cardAtI = choosedCard.get(i);
+					cardAtJ = choosedCard.get(j);
+					choosedCard.remove(j);
+					choosedCard.remove(i);
+					choosedCard.add(i,cardAtJ);
+					choosedCard.add(j,cardAtI);
+				}
+			}
+		}
+	}
+	
 	void play() {
 		
 	}
