@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -40,12 +42,49 @@ public class CardRenderer {
 		textureRegion[50] = new TextureRegion(new Texture("200px-Playing_card_diamond_2.svg.png"));
 		textureRegion[51] = new TextureRegion(new Texture("200px-Playing_card_heart_2.svg.png"));
 		textureRegion[52] = new TextureRegion(new Texture("200px-Playing_card_spade_2.svg.png"));
-		
 	}
 	
 	public void render(float delta) {
+		renderStorageCard(delta);
+		renderPlayerCard(delta);
+		renderBotCard(delta);
+		renderField(delta);
+	}
+	
+	public void renderStorageCard(float delta) {
+		ArrayList<Card> card = world.getStorageCard();
 		SpriteBatch batch = slaveCardGame.batch;
 		batch.begin();
+		for (int i = 0; i < card.size(); i++) {
+			batch.draw(textureRegion[0], 55, 50, 0, 0, 40, 50, 1, 1, 0);
+		}
+		batch.end();
+	}
+	
+	public void renderPlayerCard(float delta) {
+		SpriteBatch batch = slaveCardGame.batch;
+		batch.begin();
+		batch.draw(textureRegion[0], 140, 50, 0, 0, 40, 50, 1, 1, 0);
+		batch.draw(textureRegion[0], 320, 125, 0, 0, 40, 50, 1, 1, 0);
+		batch.end();
+	}
+	
+	public void renderBotCard(float delta) {
+		SpriteBatch batch = slaveCardGame.batch;
+		batch.begin();
+		batch.draw(textureRegion[0], 50, 125, 20, 20, 40, 50, 1, 1, -90);
+		batch.draw(textureRegion[0], 125, 220, 20, 20, 40, 50, 1, 1, -90);
+		batch.draw(textureRegion[0], 225, 500, 0, 0, 40, 50, 1, 1, 0);
+		batch.draw(textureRegion[0], 320, 425, 0, 0, 40, 50, 1, 1, 0);
+		batch.draw(textureRegion[0], 700, 125, 20, 20, 40, 50, 1, 1, -90);
+		batch.draw(textureRegion[0], 625, 220, 20, 20, 40, 50, 1, 1, -90);
+		batch.end();
+	}
+	
+	public void renderField(float delta) {
+		SpriteBatch batch = slaveCardGame.batch;
+		batch.begin();
+		batch.draw(textureRegion[0], 320, 220, 0, 0, 40, 50, 1, 1, 0);
 		batch.end();
 	}
 }

@@ -9,22 +9,44 @@ public class World {
 	private Bot bot2;
 	private Bot bot3;
 	private Player player;
+	private int turn;
+	private int currentPlayer;
 	private Field field;
 	private ArrayList<Card> storageCard;
 	
 	public World() {
-		bot1 = new Bot();
-		bot2 = new Bot();
-		bot3 = new Bot();
-		player = new Player();
+		bot1 = new Bot(1);
+		bot2 = new Bot(2);
+		bot3 = new Bot(3);
+		player = new Player(0);
 		field = new Field();
 		storageCard = createCard(52);
 		firstValue(storageCard);
 		shuffleCard(storageCard);
+		currentPlayer = dealCard(storageCard);
+		turn = 1;
 	}
 	
 	public void update(float delta) {
-		
+		if (currentPlayer == player.getId()) {
+			player.play();
+			currentPlayer = (currentPlayer + turn) % 4;
+		} else if (currentPlayer == bot1.getId()) {
+			bot1.play();
+			currentPlayer = (currentPlayer + turn) % 4;
+		} else if (currentPlayer == bot2.getId()) {
+			bot2.play();
+			currentPlayer = (currentPlayer + turn) % 4;
+		} else if (currentPlayer == bot3.getId()) {
+			bot3.play();
+			currentPlayer = (currentPlayer + turn) % 4;
+		} else {
+			currentPlayer %= 4;
+		}
+	}
+	
+	ArrayList<Card> getStorageCard() {
+		return storageCard;
 	}
 	
 	ArrayList<Card> createCard(int length) {
@@ -37,7 +59,7 @@ public class World {
 	
 	void firstValue(ArrayList<Card> card) {
 		for (int i = 0; i < card.size(); i++) {
-			card.get(i).setValue(10*((i/4)+1)+(i%4)+1);	
+			card.get(i).setValue(i);	
 		}
 	}
 	
@@ -48,5 +70,37 @@ public class World {
 			card.add(card.get(random));
 			card.remove(random);
 		}
+	}
+	
+	int dealCard(ArrayList<Card> card) {
+		int threeClub = 0;
+		for (int i =0; i < card.size(); i++) {
+			if (i % 4 == 0) {
+				if (card.get(i).getValue() == 0) {
+					threeClub = 0;
+				}
+				player.addCard(card.get(i));
+			}
+			if (i % 4 == 1) {
+				if (card.get(i).getValue() == 0) {
+					threeClub = 1;
+				}
+				bot1.addCard(card.get(i));
+			}
+			if (i % 4 == 2) {
+				if (card.get(i).getValue() == 0) {
+					threeClub = 2;
+				}
+				bot2.addCard(card.get(i));
+			}
+			if (i % 4 == 3) {
+				if (card.get(i).getValue() == 0) {
+					threeClub = 3;
+				}
+				bot3.addCard(card.get(i));
+			}
+		}
+		card.clear();
+		return threeClub;
 	}
 }
