@@ -62,26 +62,26 @@ public class CardRenderer {
 	}
 	
 	public void renderPlayerCard(float delta) {
-		ArrayList<Card> card = world.getPlayer().getCard();
-		ArrayList<Card> choosedCard = world.getPlayer().getChoosedCard();
+		ArrayList<Card> card = world.getPlayer(0).getCard();
+		ArrayList<Card> choosedCard = world.getPlayer(0).getChoosedCard();
 		SpriteBatch batch = slaveCardGame.batch;
 		batch.begin();
 		for (int i = 0; i < card.size(); i++) {
 			batch.draw(textureRegion[card.get(i).getValue() + 1], 400-20*card.size()+40*i, 50, 0, 0, 40, 50, 1, 1, 0);
 		}
 		for (int i = 0; i < choosedCard.size(); i++) {
-			batch.draw(textureRegion[card.get(i).getValue() + 1], 400-20*card.size()+40*i, 125, 0, 0, 40, 50, 1, 1, 0);			
+			batch.draw(textureRegion[choosedCard.get(i).getValue() + 1], 400-20*choosedCard.size()+40*i, 125, 0, 0, 40, 50, 1, 1, 0);			
 		}
 		batch.end();
 	}
 	
 	public void renderBotCard(float delta) {
-		ArrayList<Card> bot1Card = world.getBot(1).getCard();
-		ArrayList<Card> bot1ChoosedCard = world.getBot(1).getChoosedCard();
-		ArrayList<Card> bot2Card = world.getBot(2).getCard();
-		ArrayList<Card> bot2ChoosedCard = world.getBot(2).getChoosedCard();
-		ArrayList<Card> bot3Card = world.getBot(3).getCard();
-		ArrayList<Card> bot3ChoosedCard = world.getBot(3).getChoosedCard();
+		ArrayList<Card> bot1Card = world.getPlayer(1).getCard();
+		ArrayList<Card> bot1ChoosedCard = world.getPlayer(1).getChoosedCard();
+		ArrayList<Card> bot2Card = world.getPlayer(2).getCard();
+		ArrayList<Card> bot2ChoosedCard = world.getPlayer(2).getChoosedCard();
+		ArrayList<Card> bot3Card = world.getPlayer(3).getCard();
+		ArrayList<Card> bot3ChoosedCard = world.getPlayer(3).getChoosedCard();
 		SpriteBatch batch = slaveCardGame.batch;
 		batch.begin();
 		for (int i = bot1Card.size() - 1; i >= 0; i--) {
@@ -106,9 +106,12 @@ public class CardRenderer {
 	}
 	
 	public void renderField(float delta) {
+		ArrayList<Card> field = world.getField();
 		SpriteBatch batch = slaveCardGame.batch;
 		batch.begin();
-		batch.draw(textureRegion[0], 320, 220, 0, 0, 40, 50, 1, 1, 0);
+		for (int i = 0; i < field.size(); i++) {
+			batch.draw(textureRegion[field.get(i).getValue() + 1], 400-20*field.size()+40*i, 275, 0, 0, 40, 50, 1, 1, 0);			
+		}
 		batch.end();
 	}
 }

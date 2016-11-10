@@ -4,11 +4,15 @@ import java.util.ArrayList;
 
 public class Player {
 	private int id;
+	private boolean isPass;
+	private boolean isEmpty;
 	private ArrayList<Card> card;
 	private ArrayList<Card> choosedCard;
 	
 	Player(int id) {
 		this.id = id;
+		isPass = false;
+		isEmpty = false;
 		card = new ArrayList<Card>();
 		choosedCard = new ArrayList<Card>();
 	}
@@ -58,7 +62,37 @@ public class Player {
 		}
 	}
 	
-	void play() {
-		
+	void chooseCard(int i) {
+		choosedCard.add(card.get(i));
+		card.remove(i);
+	}
+	
+	void unchooseCard(int i) {
+		card.add(choosedCard.get(i));
+		choosedCard.remove(i);
+	}
+	
+	void clearChoosedCard() {
+		choosedCard.clear();
+	}
+	
+	boolean isPass() {
+		return isPass;
+	}
+	
+	void pass() {
+		isPass = true;
+	}
+	
+	void unPass() {
+		isPass = false;
+	}
+	
+	boolean isWin() {
+		return isEmpty;
+	}
+	
+	void win() {
+		isEmpty = true;
 	}
 }
