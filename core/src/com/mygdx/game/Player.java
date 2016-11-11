@@ -132,10 +132,17 @@ public class Player {
 				world.nextCurrentPlayer();
 			}
 		} else if (world.getField().size() == 2) {
-			if (haveTwoCard() && card.get(card.size() - 1).getValue() < world.getField().get(0).getValue()) {
+			if (!haveTwoCard() && card.get(card.size() - 1).getValue() < world.getField().get(0).getValue()) {
 				pass();
 				world.nextCurrentPlayer();
-			} else if (choosedCard.get(1).getValue() > world.getField().get(1).getValue()) {
+			} else {
+				for (int i = 0; i < card.size() - 1; i++) {
+					if (card.get(i).getValue() / 4 == card.get(i+1).getValue() / 4) {
+						chooseCard(i+1);
+						chooseCard(i);
+						break;
+					}
+				}
 				world.submitCard();
 				if (card.size() == 0) {
 					win();
@@ -145,10 +152,18 @@ public class Player {
 			}
 			
 		} else if (world.getField().size() == 3) {
-			if (haveThreeCard() && card.get(card.size() - 1).getValue() < world.getField().get(0).getValue()) {
+			if (!haveThreeCard() && card.get(card.size() - 1).getValue() < world.getField().get(0).getValue()) {
 				pass();
 				world.nextCurrentPlayer();
-			} else if (choosedCard.get(0).getValue() > world.getField().get(0).getValue()) {
+			} else {
+				for (int i = 0; i < card.size() - 2; i++) {
+					if (card.get(i).getValue() / 4 == card.get(i+1).getValue() / 4 && card.get(i).getValue() / 4 == card.get(i+2).getValue() / 4) {
+						chooseCard(i+2);
+						chooseCard(i+1);
+						chooseCard(i);
+						break;
+					}
+				}
 				world.submitCard();
 				if (card.size() == 0) {
 					win();
@@ -158,10 +173,19 @@ public class Player {
 			}
 			
 		} else {
-			if (haveFourCard() && card.get(card.size() - 1).getValue() < world.getField().get(0).getValue()) {
+			if (!haveFourCard() && card.get(card.size() - 1).getValue() < world.getField().get(0).getValue()) {
 				pass();
 				world.nextCurrentPlayer();
-			} else if (choosedCard.get(0).getValue() > world.getField().get(0).getValue()) {
+			} else {
+				for (int i = 0; i < card.size() - 3; i++) {
+					if (card.get(i).getValue() / 4 == card.get(i+1).getValue() / 4 && card.get(i).getValue() / 4 == card.get(i+2).getValue() / 4 && card.get(i).getValue() / 4 == card.get(i+3).getValue() / 4) {
+						chooseCard(i+3);
+						chooseCard(i+2);
+						chooseCard(i+1);
+						chooseCard(i);
+						break;
+					}
+				}
 				world.submitCard();
 				if (card.size() == 0) {
 					win();
@@ -270,13 +294,8 @@ public class Player {
 	
 	boolean haveTwoCard() {
 		for (int i = 0; i < card.size() - 1; i++) {
-			chooseCard(i+1);
-			chooseCard(i);
-			if (choosedCard.get(0).getValue() / 4 == choosedCard.get(1).getValue() / 4) {
+			if (card.get(i).getValue() / 4 == card.get(i+1).getValue() / 4) {
 				return true;
-			} else {
-				unchooseCard(1);
-				unchooseCard(0);
 			}
 		}
 		return false;
@@ -284,15 +303,8 @@ public class Player {
 	
 	boolean haveThreeCard() {
 		for (int i = 0; i < card.size() - 2; i++) {
-			chooseCard(i+2);
-			chooseCard(i+1);
-			chooseCard(i);
-			if (choosedCard.get(0).getValue() / 4 == choosedCard.get(1).getValue() / 4 && choosedCard.get(0).getValue() / 4 == choosedCard.get(2).getValue() / 4) {
+			if (card.get(i).getValue() / 4 == card.get(i+1).getValue() / 4 && card.get(i).getValue() / 4 == card.get(i+2).getValue() / 4) {
 				return true;
-			} else {
-				unchooseCard(2);
-				unchooseCard(1);
-				unchooseCard(0);
 			}
 		}
 		return false;
@@ -300,17 +312,8 @@ public class Player {
 	
 	boolean haveFourCard() {
 		for (int i = 0; i < card.size() - 3; i++) {
-			chooseCard(i+3);
-			chooseCard(i+2);
-			chooseCard(i+1);
-			chooseCard(i);
-			if (choosedCard.get(0).getValue() / 4 == choosedCard.get(1).getValue() / 4 && choosedCard.get(0).getValue() / 4 == choosedCard.get(2).getValue() / 4 && choosedCard.get(0).getValue() / 4 == choosedCard.get(3).getValue() / 4) {
+			if (card.get(i).getValue() / 4 == card.get(i+1).getValue() / 4 && card.get(i).getValue() / 4 == card.get(i+2).getValue() / 4 && card.get(i).getValue() / 4 == card.get(i+3).getValue() / 4) {
 				return true;
-			} else {
-				unchooseCard(3);
-				unchooseCard(2);
-				unchooseCard(1);
-				unchooseCard(0);
 			}
 		}
 		return false;

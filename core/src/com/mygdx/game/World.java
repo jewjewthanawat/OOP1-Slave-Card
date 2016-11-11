@@ -7,116 +7,74 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class World {
-	private Player player;
-	private Player bot1;
-	private Player bot2;
-	private Player bot3;
+	private Player[] player;
 	private int turn;
 	private int currentPlayer;
 	private ArrayList<Card> field;
 	private ArrayList<Card> storageCard;
 	long lastActTime;
-	
+
 	public World() {
-		player = new Player(this, 0);
-		bot1 = new Player(this, 1);
-		bot2 = new Player(this, 2);
-		bot3 = new Player(this, 3);
+		createPlayer();
 		field = new ArrayList<Card>();
 		newGame();
 	}
-	
+
 	public void update(float delta) {
 		sortAllCard();
-		if (currentPlayer == player.getId()) {
-			//lastActTime = TimeUtils.nanoTime();
-			if (player.isWin()) {
-				nextCurrentPlayer();
-			} else {
-				if (bot1.isWin() && bot2.isWin() && bot3.isWin()) {
-					endGame();
-				} else {
-					if (player.isPass()) {
-						nextCurrentPlayer();
-					} else {
-						if (bot1.isPass() && bot2.isPass() && bot3.isPass()) {
-							clearField();
-							player.playAsPlayer();
-						} else {
-							player.playAsPlayer();
-						}
-					}
-				}
-			}
-		} else if (currentPlayer == bot1.getId()) {
-			//lastActTime = TimeUtils.nanoTime();
-			if (bot1.isWin()) {
-				nextCurrentPlayer();
-			} else {
-				if (player.isWin() && bot2.isWin() && bot3.isWin()) {
-					endGame();
-				} else {
-					if (bot1.isPass()) {
-						nextCurrentPlayer();
-					} else {
-						if (player.isPass() && bot2.isPass() && bot3.isPass()) {
-							clearField();
-							bot1.playAsBot();
-						} else {
-							bot1.playAsBot();
-						}
-					}
-				}
-			}
-		} else if (currentPlayer == bot2.getId()) {
-			//lastActTime = TimeUtils.nanoTime();
-			if (bot2.isWin()) {
-				nextCurrentPlayer();
-			} else {
-				if (player.isWin() && bot1.isWin() && bot3.isWin()) {
-					endGame();
-				} else {
-					if (bot2.isPass()) {
-						nextCurrentPlayer();
-					} else {
-						if (player.isPass() && bot1.isPass() && bot3.isPass()) {
-							clearField();
-							bot2.playAsBot();
-						} else {
-							bot2.playAsBot();
-						}
-					}
-				}
-			}
-		} else if (currentPlayer == bot3.getId()) {
-			//lastActTime = TimeUtils.nanoTime();
-			if (bot3.isWin()) {
-				nextCurrentPlayer();
-			} else {
-				if (player.isWin() && bot1.isWin() && bot2.isWin()) {
-					endGame();
-				} else {
-					if (bot3.isPass()) {
-						nextCurrentPlayer();
-					} else {
-						if (player.isPass() && bot1.isPass() && bot2.isPass()) {
-							clearField();
-							bot3.playAsBot();
-						} else {
-							bot3.playAsBot();
-						}
-					}
-				}
-			}
+		if (currentPlayer < 0) {
+			currentPlayer += 4;
+		} else if (currentPlayer < 4) {
+			playerAct(currentPlayer);
 		} else {
-			if (currentPlayer < 0) {
-				currentPlayer += 4;
+			currentPlayer %= 4;
+		}
+	}
+
+	void createPlayer() {
+		player = new Player[4];
+		for (int i = 0; i < player.length; i++) {
+			player[i] = new Player(this, i);
+		}
+	}
+
+	void playerAct(int id) {
+		if (player[id].isWin()) {
+			nextCurrentPlayer();
+		} else if (otherPlayerIsWin(id)) {
+			endGame();
+		} else if (player[id].isPass()) {
+			nextCurrentPlayer();
+		} else {
+			if (otherPlayerIsPass(id)) {
+				clearField();
+			}
+			if (id == 0) {
+				player[id].playAsPlayer();
 			} else {
-				currentPlayer %= 4;
+				player[id].playAsBot();
 			}
 		}
 	}
-	
+
+	boolean otherPlayerIsWin(int id) {
+		for (int i = 0; i < player.length; i++) {
+			if (i != id && !player[i].isWin()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	boolean otherPlayerIsPass(int id) {
+		for (int i = 0; i < player.length; i++) {
+			if (i != id && !player[i].isPass()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	void newGame() {
 		storageCard = createCard(52);
 		firstValue(storageCard);
@@ -126,45 +84,34 @@ public class World {
 		turn = 1;
 		submitFirstCard(currentPlayer);
 	}
-	
+
 	void endGame() {
-		bot1.showCard();
-		bot2.showCard();
-		bot3.showCard();
+		for (int i = 0; i < player.length; i++) {
+			player[i].showCard();
+		}
 		if (!isDelay(1)) {
 			clearField();
-			player.getCard().clear();
-			bot1.getCard().clear();
-			bot2.getCard().clear();
-			bot3.getCard().clear();
 			storageCard.clear();
-			player.reset();
-			bot1.reset();
-			bot2.reset();
-			bot3.reset();
+			for (int i = 0; i < player.length; i++) {
+				player[i].getCard().clear();
+				player[i].reset();
+			}
 			newGame();
 		}
 	}
-	
+
 	ArrayList<Card> getStorageCard() {
 		return storageCard;
 	}
-	
+
 	Player getPlayer(int id) {
-		if (id == 0) {
-			return player;
-		} else if (id == 1) {
-			return bot1;
-		} else if (id == 2) {
-			return bot2;
-		}
-		return bot3;
+		return player[id];
 	}
-	
+
 	ArrayList<Card> getField() {
 		return field;
 	}
-	
+
 	ArrayList<Card> createCard(int length) {
 		ArrayList<Card> card = new ArrayList<Card>();
 		for (int i = 0; i < length; i++) {
@@ -172,70 +119,49 @@ public class World {
 		}
 		return card;
 	}
-	
+
 	void firstValue(ArrayList<Card> card) {
 		for (int i = 0; i < card.size(); i++) {
-			card.get(i).setValue(i);	
+			card.get(i).setValue(i);
 		}
 	}
-	
+
 	void shuffleCard(ArrayList<Card> card) {
 		int random;
-		for (int i = 0; i < 2*card.size(); i++) {
-			random = MathUtils.random(card.size()-1);
+		for (int i = 0; i < 2 * card.size(); i++) {
+			random = MathUtils.random(card.size() - 1);
 			card.add(card.get(random));
 			card.remove(random);
 		}
 	}
-	
+
 	int dealCard(ArrayList<Card> card) {
 		int threeClub = 0;
-		for (int i =0; i < card.size(); i++) {
-			if (i % 4 == 0) {
-				if (card.get(i).getValue() == 0) {
-					threeClub = 0;
-				}
-				player.addCard(card.get(i));
+		for (int i = 0; i < card.size(); i++) {
+			if (card.get(i).getValue() == 0) {
+				threeClub = i % 4;
 			}
-			if (i % 4 == 1) {
-				if (card.get(i).getValue() == 0) {
-					threeClub = 1;
-				}
-				bot1.addCard(card.get(i));
-			}
-			if (i % 4 == 2) {
-				if (card.get(i).getValue() == 0) {
-					threeClub = 2;
-				}
-				bot2.addCard(card.get(i));
-			}
-			if (i % 4 == 3) {
-				if (card.get(i).getValue() == 0) {
-					threeClub = 3;
-				}
-				bot3.addCard(card.get(i));
-			}
+			player[i % 4].addCard(card.get(i));
 		}
 		card.clear();
 		return threeClub;
 	}
-	
+
 	void sortAllCard() {
-		player.sortCard();
-		bot1.sortCard();
-		bot2.sortCard();
-		bot3.sortCard();
+		for (int i = 0; i < player.length; i++) {
+			player[i].sortCard();
+		}
 	}
-	
+
 	void submitFirstCard(int currentPlayer) {
 		if (currentPlayer == player.getId()) {
 			player.chooseCard(0);
 		} else if (currentPlayer == bot1.getId()) {
 			bot1.chooseCard(0);
 		} else if (currentPlayer == bot2.getId()) {
-			bot2.chooseCard(0);			
+			bot2.chooseCard(0);
 		} else if (currentPlayer == bot3.getId()) {
-			bot3.chooseCard(0);		
+			bot3.chooseCard(0);
 		} else {
 			if (currentPlayer < 0) {
 				currentPlayer += 4;
@@ -247,7 +173,7 @@ public class World {
 		lastActTime = TimeUtils.nanoTime();
 		currentPlayer += turn;
 	}
-	
+
 	void submitCard() {
 		for (int i = 0; i < field.size(); i++) {
 			storageCard.add(field.get(i));
@@ -270,7 +196,7 @@ public class World {
 		}
 		player.clearChoosedCard();
 	}
-	
+
 	void clearField() {
 		for (int i = 0; i < field.size(); i++) {
 			storageCard.add(field.get(i));
@@ -281,20 +207,20 @@ public class World {
 		bot2.unPass();
 		bot3.unPass();
 	}
-	
+
 	void setLastActTime(long time) {
 		lastActTime = time;
 	}
-	
+
 	void nextCurrentPlayer() {
 		currentPlayer += turn;
 	}
-	
+
 	void switchTurn() {
 		turn *= -1;
 	}
-	
+
 	boolean isDelay(double delay) {
-		return TimeUtils.nanoTime() - lastActTime <= delay*1000000000;
+		return TimeUtils.nanoTime() - lastActTime <= delay * 1000000000;
 	}
 }
