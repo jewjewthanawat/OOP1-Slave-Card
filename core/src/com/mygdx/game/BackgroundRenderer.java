@@ -18,7 +18,6 @@ public class BackgroundRenderer {
 	private TextureRegion clockWise;
 	private TextureRegion round;
 	private TextureRegion score;
-	private TextureRegion storageCard;
 	private TextureRegion submitButton;
 	private TextureRegion passButton;
 	
@@ -36,7 +35,6 @@ public class BackgroundRenderer {
 		clockWise = new TextureRegion(new Texture("red.png"));
 		round = new TextureRegion(new Texture("red.png"));
 		score = new TextureRegion(new Texture("red.png"));
-		storageCard = new TextureRegion(new Texture("red.png"));
 		submitButton = new TextureRegion(new Texture("green.png"));
 		passButton = new TextureRegion(new Texture("red.png"));
 	}
@@ -56,7 +54,6 @@ public class BackgroundRenderer {
 		batch.draw(clockWise, 50, 500, 0, 0, 50, 50, 1, 1, 0);
 		batch.draw(round, 125, 500, 0, 0, 50, 50, 1, 1, 0);
 		batch.draw(score, 700, 500, 0, 0, 50, 50, 1, 1, 0);
-		//batch.draw(storageCard, 55, 50, 0, 0, 40, 50, 1, 1, 0);
 		batch.draw(submitButton, 700, 87, 0, 0, 50, 30, 1, 1, 0);
 		batch.draw(passButton, 700, 50, 0, 0, 50, 30, 1, 1, 0);
 		batch.end();

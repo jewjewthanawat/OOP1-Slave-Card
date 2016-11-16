@@ -46,20 +46,9 @@ public class CardRenderer {
 	}
 	
 	public void render(float delta) {
-		renderStorageCard(delta);
 		renderPlayerCard(delta);
 		renderBotCard(delta);
 		renderField(delta);
-	}
-	
-	public void renderStorageCard(float delta) {
-		ArrayList<Card> card = world.getStorageCard();
-		SpriteBatch batch = slaveCardGame.batch;
-		batch.begin();
-		for (int i = 0; i < card.size(); i++) {
-			batch.draw(textureRegion[0], 55, 50, 0, 0, 40, 50, 1, 1, 0);
-		}
-		batch.end();
 	}
 	
 	public void renderPlayerCard(float delta) {

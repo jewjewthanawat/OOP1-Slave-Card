@@ -11,12 +11,10 @@ public class World {
 	private int turn;
 	private int currentPlayer;
 	private ArrayList<Card> field;
-	private ArrayList<Card> storageCard;
 	long lastActTime;
 
 	public World() {
 		createPlayer();
-		field = new ArrayList<Card>();
 		newGame();
 	}
 
@@ -52,7 +50,10 @@ public class World {
 			if (id == 0) {
 				player[id].playAsPlayer();
 			} else {
-				player[id].playAsBot();
+				if (!isDelay(1)) {
+					setLastActTime(TimeUtils.nanoTime());
+					player[id].playAsBot();
+				}
 			}
 		}
 	}
@@ -76,10 +77,10 @@ public class World {
 	}
 
 	void newGame() {
-		storageCard = createCard(52);
-		firstValue(storageCard);
-		shuffleCard(storageCard);
-		currentPlayer = dealCard(storageCard);
+		field = createCard(52);
+		firstValue(field);
+		shuffleCard(field);
+		currentPlayer = dealCard(field);
 		sortAllCard();
 		turn = 1;
 		submitFirstCard(currentPlayer);
@@ -91,17 +92,12 @@ public class World {
 		}
 		if (!isDelay(1)) {
 			clearField();
-			storageCard.clear();
 			for (int i = 0; i < player.length; i++) {
 				player[i].getCard().clear();
 				player[i].reset();
 			}
 			newGame();
 		}
-	}
-
-	ArrayList<Card> getStorageCard() {
-		return storageCard;
 	}
 
 	Player getPlayer(int id) {
@@ -154,14 +150,14 @@ public class World {
 	}
 
 	void submitFirstCard(int currentPlayer) {
-		if (currentPlayer == player.getId()) {
-			player.chooseCard(0);
-		} else if (currentPlayer == bot1.getId()) {
-			bot1.chooseCard(0);
-		} else if (currentPlayer == bot2.getId()) {
-			bot2.chooseCard(0);
-		} else if (currentPlayer == bot3.getId()) {
-			bot3.chooseCard(0);
+		if (currentPlayer == player[0].getId()) {
+			player[0].chooseCard(0);
+		} else if (currentPlayer == player[1].getId()) {
+			player[1].chooseCard(0);
+		} else if (currentPlayer == player[2].getId()) {
+			player[2].chooseCard(0);
+		} else if (currentPlayer == player[3].getId()) {
+			player[3].chooseCard(0);
 		} else {
 			if (currentPlayer < 0) {
 				currentPlayer += 4;
@@ -175,37 +171,31 @@ public class World {
 	}
 
 	void submitCard() {
-		for (int i = 0; i < field.size(); i++) {
-			storageCard.add(field.get(i));
-		}
 		field.clear();
-		for (int i = 0; i < bot1.getChoosedCard().size(); i++) {
-			field.add(bot1.getChoosedCard().get(i));
+		for (int i = 0; i < player[1].getChoosedCard().size(); i++) {
+			field.add(player[1].getChoosedCard().get(i));
 		}
-		bot1.clearChoosedCard();
-		for (int i = 0; i < bot2.getChoosedCard().size(); i++) {
-			field.add(bot2.getChoosedCard().get(i));
+		player[1].clearChoosedCard();
+		for (int i = 0; i < player[2].getChoosedCard().size(); i++) {
+			field.add(player[2].getChoosedCard().get(i));
 		}
-		bot2.clearChoosedCard();
-		for (int i = 0; i < bot3.getChoosedCard().size(); i++) {
-			field.add(bot3.getChoosedCard().get(i));
+		player[2].clearChoosedCard();
+		for (int i = 0; i < player[3].getChoosedCard().size(); i++) {
+			field.add(player[3].getChoosedCard().get(i));
 		}
-		bot3.clearChoosedCard();
-		for (int i = 0; i < player.getChoosedCard().size(); i++) {
-			field.add(player.getChoosedCard().get(i));
+		player[3].clearChoosedCard();
+		for (int i = 0; i < player[0].getChoosedCard().size(); i++) {
+			field.add(player[0].getChoosedCard().get(i));
 		}
-		player.clearChoosedCard();
+		player[0].clearChoosedCard();
 	}
 
 	void clearField() {
-		for (int i = 0; i < field.size(); i++) {
-			storageCard.add(field.get(i));
-		}
 		field.clear();
-		player.unPass();
-		bot1.unPass();
-		bot2.unPass();
-		bot3.unPass();
+		player[0].unPass();
+		player[1].unPass();
+		player[2].unPass();
+		player[3].unPass();
 	}
 
 	void setLastActTime(long time) {
