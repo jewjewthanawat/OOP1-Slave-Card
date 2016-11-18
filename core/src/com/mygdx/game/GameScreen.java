@@ -12,7 +12,7 @@ public class GameScreen extends ScreenAdapter {
 	public GameScreen (SlaveCardGame slaveCardGame) {
 		this.world = new World();
 		this.worldRenderer = new WorldRenderer(slaveCardGame,world);
-		this.backgroundRenderer = new BackgroundRenderer(slaveCardGame);
+		this.backgroundRenderer = new BackgroundRenderer(slaveCardGame,world);
 		this.cardRenderer = new CardRenderer(slaveCardGame,world);
 	}
 	

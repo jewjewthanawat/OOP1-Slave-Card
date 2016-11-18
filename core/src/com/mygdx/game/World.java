@@ -8,13 +8,16 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public class World {
 	private Player[] player;
+	private int game;
 	private int turn;
 	private int currentPlayer;
+	private int numberOfWinner;
 	private ArrayList<Card> field;
 	long lastActTime;
 
 	public World() {
 		createPlayer();
+		game = 0;
 		newGame();
 	}
 
@@ -37,7 +40,7 @@ public class World {
 	}
 
 	void playerAct(int id) {
-		if (player[id].isWin()) {
+		if (player[id].isEnd()) {
 			nextCurrentPlayer();
 		} else if (otherPlayerIsWin(id)) {
 			endGame();
@@ -60,7 +63,7 @@ public class World {
 
 	boolean otherPlayerIsWin(int id) {
 		for (int i = 0; i < player.length; i++) {
-			if (i != id && !player[i].isWin()) {
+			if (i != id && !player[i].isEnd()) {
 				return false;
 			}
 		}
@@ -77,13 +80,56 @@ public class World {
 	}
 
 	void newGame() {
+		int i , j;
+		game++;
 		field = createCard(52);
 		firstValue(field);
 		shuffleCard(field);
 		currentPlayer = dealCard(field);
+		if (game != 1) {
+			for (i = 0; i < player.length; i ++) {
+				if (player[i].getRank() == 4) {
+					currentPlayer = i;
+				}
+			}
+		}
 		sortAllCard();
-		turn = 1;
-		submitFirstCard(currentPlayer);
+		numberOfWinner = 0;
+		if (game == 1) {
+			turn = 1;
+			submitFirstCard(currentPlayer);
+		} else {
+			for (i = 0; i < player.length; i++) {
+				if (player[i].getRank() == 1) {
+					if (i - currentPlayer == 1 || i - currentPlayer == -3) {
+						turn = -1;
+					} else  {
+						turn = 1;
+					}
+					player[i].getCard().add(player[currentPlayer].getCard().get(player[currentPlayer].getCard().size() - 1));
+					player[i].getCard().add(player[currentPlayer].getCard().get(player[currentPlayer].getCard().size() - 2));
+					player[currentPlayer].getCard().remove(player[currentPlayer].getCard().size() - 1);
+					player[currentPlayer].getCard().remove(player[currentPlayer].getCard().size() - 1);
+					player[currentPlayer].getCard().add(player[i].getCard().get(0));
+					player[currentPlayer].getCard().add(player[i].getCard().get(1));
+					player[i].getCard().remove(0);
+					player[i].getCard().remove(0);
+				}
+			}
+			for (i = 0; i < player.length; i++) {
+				if (player[i].getRank() == 2) {
+					for (j = 0; j < player.length; j ++) {
+						if (player[j].getRank() == 3) {
+							player[i].getCard().add(player[j].getCard().get(player[j].getCard().size() - 1));
+							player[j].getCard().remove(player[j].getCard().size() - 1);
+							player[j].getCard().add(player[i].getCard().get(0));
+							player[i].getCard().remove(0);
+						}
+					}
+				}
+			}
+			sortAllCard();
+		}
 	}
 
 	void endGame() {
@@ -102,6 +148,26 @@ public class World {
 
 	Player getPlayer(int id) {
 		return player[id];
+	}
+	
+	int getCurrentPlayer() {
+		return currentPlayer;
+	}
+	
+	int getTurn() {
+		return turn;
+	}
+	
+	int getNumberOfWinner() {
+		return numberOfWinner;
+	}
+	
+	void increaseNumberOfWinner() {
+		numberOfWinner++;
+	}
+	
+	String getGame() {
+		return "" + game;
 	}
 
 	ArrayList<Card> getField() {
